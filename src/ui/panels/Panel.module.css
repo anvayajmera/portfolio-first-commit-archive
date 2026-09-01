@@ -1,0 +1,560 @@
+/* ============================================================================
+   THE SET
+   ----------------------------------------------------------------------------
+   Content arrives inside a television. The cabinet, antennas and legs are CSS
+   around the panel; the picture area itself is plain paper.
+
+   That split is deliberate. An earlier version put scanlines and a curved-glass
+   vignette over the body copy, which made the text harder to read to sell an
+   effect the frame already sells. The set says television. The screen just has
+   to be legible.
+
+   The shell's padding keeps the cabinet clear of the top-right controls and the
+   bottom nav, which the panel used to slide underneath.
+   ========================================================================= */
+
+.shell {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  padding: 5.6rem clamp(1rem, 3vw, 2.6rem) 5.4rem;
+  pointer-events: none;
+}
+
+/* --- antennas ------------------------------------------------------------- */
+
+.antenna {
+  position: relative;
+  width: min(72rem, 100%);
+  height: 3.2rem;
+  opacity: 0;
+  transform: translateY(1.2rem);
+  transition: opacity 240ms var(--ease-out-quart), transform 520ms var(--ease-out-expo);
+}
+
+.antennaLeft,
+.antennaRight {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  height: 3.1rem;
+  border-radius: 2px;
+  background: linear-gradient(to top, #6d7488, #aab1c4);
+  transform-origin: 50% 100%;
+}
+/* Unequal lengths and angles. A matched pair reads as a decoration; a
+   mismatched pair reads as something somebody has pushed around for signal. */
+.antennaLeft { transform: rotate(-28deg) scaleY(1); }
+.antennaRight { transform: rotate(21deg) scaleY(0.82); }
+
+.antennaBase {
+  position: absolute;
+  bottom: -0.35rem;
+  left: 50%;
+  width: 1.5rem;
+  height: 0.75rem;
+  margin-left: -0.75rem;
+  border-radius: 0.4rem 0.4rem 0 0;
+  background: #3d4353;
+}
+
+/* --- cabinet -------------------------------------------------------------- */
+
+.panel {
+  --paper: #f4efe4;
+  --paper-deep: #e8e0d2;
+  --ink: #17324e;
+  --ink-muted: #566a7c;
+  --ink-faint: #7c8b98;
+
+  position: relative;
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.9rem, 1.6vw, 1.5rem);
+  width: min(72rem, 100%);
+  height: min(42rem, 100%);
+  padding: clamp(1.4rem, 2.6vw, 2.4rem) clamp(1.3rem, 2.6vw, 2.4rem) clamp(1.3rem, 2.2vw, 2rem);
+  overflow: hidden;
+  color: var(--ink);
+
+  border: clamp(0.65rem, 1.3vw, 1.15rem) solid #343a4a;
+  border-radius: clamp(0.7rem, 1.5vw, 1.2rem);
+  background: var(--paper);
+  box-shadow:
+    0 0 0 clamp(0.22rem, 0.5vw, 0.45rem) #4b5266,
+    0 40px 90px -30px rgba(4, 10, 22, 0.8);
+
+  opacity: 0;
+  transform: scale(0.55);
+  transform-origin: var(--tv-x, 50%) var(--tv-y, 50%);
+  transition:
+    opacity 240ms var(--ease-out-quart),
+    transform 620ms var(--ease-out-expo);
+}
+
+.panel[data-open='true'] { opacity: 1; transform: scale(1); }
+.panel[data-open='false'] { pointer-events: none; }
+
+.shell:has(.panel[data-open='true']) .antenna,
+.shell:has(.panel[data-open='true']) .legs { opacity: 1; transform: translateY(0); }
+
+/* --- legs ----------------------------------------------------------------- */
+
+.legs {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: min(58rem, 84%);
+  height: 1.1rem;
+  opacity: 0;
+  transform: translateY(-0.8rem);
+  transition: opacity 240ms var(--ease-out-quart), transform 520ms var(--ease-out-expo);
+}
+
+.legs span {
+  width: 2.6rem;
+  height: 1.1rem;
+  border-radius: 0 0 0.35rem 0.35rem;
+  background: linear-gradient(to bottom, #3d4353, #2a2e3a);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel, .panel[data-open='true'] { transform: none; transition: opacity 140ms linear; }
+  .antenna, .legs { transition: opacity 140ms linear; transform: none; }
+}
+
+.header {
+  display: grid;
+  gap: 0.65rem;
+  max-width: 48rem;
+  flex: 0 0 auto;
+}
+
+.accentRule {
+  width: 2.6rem;
+  height: 3px;
+  background: var(--panel-accent, var(--c-brand));
+}
+
+.eyebrow {
+  font-family: var(--ff-display);
+  font-size: var(--fs-300);
+  font-weight: 600;
+  color: var(--panel-accent, var(--c-brand));
+}
+
+.heading {
+  max-width: 23ch;
+  color: var(--ink);
+  font-size: clamp(1.65rem, 1.25rem + 1.55vw, 2.65rem);
+  line-height: 1.04;
+  letter-spacing: -0.04em;
+  outline-offset: 6px;
+}
+
+.lede {
+  max-width: 58ch;
+  color: var(--ink-muted);
+  font-size: var(--fs-500);
+  line-height: 1.52;
+}
+
+.scroller { min-height: 0; }
+
+.body {
+  display: grid;
+  gap: 1rem;
+  max-width: 60ch;
+  color: var(--ink-muted);
+  font-size: var(--fs-400);
+  line-height: 1.65;
+}
+
+.storyThreads {
+  display: grid;
+  gap: 0;
+  margin-top: 2rem;
+  padding: 0;
+  border-top: 1px solid rgba(23, 50, 78, 0.18);
+  list-style: none;
+}
+
+.storyThread {
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.38fr) 1fr;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid rgba(23, 50, 78, 0.18);
+}
+
+.storyThread h3 {
+  color: var(--ink);
+  font-size: var(--fs-300);
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+
+.storyThread p { color: var(--ink-muted); font-size: var(--fs-300); line-height: 1.55; }
+
+/* Project dock */
+.projectBrowser {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.7fr) minmax(0, 1.65fr);
+  min-height: 0;
+  flex: 1 1 auto;
+  border-top: 1px solid rgba(23, 50, 78, 0.2);
+}
+
+.projectIndex {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  padding-top: 1rem;
+  padding-right: clamp(0.8rem, 1.8vw, 1.6rem);
+  border-right: 1px solid rgba(23, 50, 78, 0.2);
+}
+
+.projectCount {
+  padding: 0.15rem 0 0.8rem;
+  color: var(--ink-faint);
+  font-size: var(--fs-200);
+}
+
+.projectList {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  padding: 0;
+  /* Never shrink away. With the recognition list added underneath, the flex
+     column let this collapse to nothing and the three builds vanished
+     entirely, leaving a sidebar of awards and no way to open a project. The
+     builds are the primary control here; the awards scroll instead. */
+  flex: 0 0 auto;
+}
+
+.projectTrigger {
+  display: grid;
+  grid-template-columns: 1.8rem 2.4rem minmax(0, 1fr);
+  gap: 0.7rem;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 0.7rem;
+  border-top: 1px solid rgba(23, 50, 78, 0.13);
+  color: var(--ink);
+  text-align: left;
+  transition: background-color var(--dur-fast) var(--ease-out-quart), transform var(--dur-fast) var(--ease-out-quart);
+}
+
+.projectTrigger:hover { background: rgba(23, 50, 78, 0.055); }
+.projectTrigger[data-state='active'] { background: #fffaf0; transform: translateX(0.35rem); }
+
+.projectNumber {
+  color: var(--ink-faint);
+  font-family: var(--ff-display);
+  font-size: var(--fs-100);
+  font-variant-numeric: tabular-nums;
+}
+
+.projectMarkSmall {
+  display: grid;
+  place-items: center;
+  width: 2.35rem;
+  aspect-ratio: 1;
+  color: white;
+}
+
+.projectMarkSmall svg { width: 1.1rem; height: 1.1rem; }
+
+.projectTriggerCopy { display: grid; gap: 0.08rem; min-width: 0; }
+.projectTriggerCopy strong { overflow: hidden; font-family: var(--ff-display); font-size: var(--fs-300); text-overflow: ellipsis; white-space: nowrap; }
+.projectTriggerCopy span { color: var(--ink-muted); font-size: var(--fs-100); }
+
+.projectDetails { min-height: 0; padding-left: clamp(1rem, 2.6vw, 2.5rem); }
+
+.projectContent { height: 100%; padding-right: clamp(0.2rem, 1vw, 0.8rem); }
+.projectContent:focus-visible { outline-offset: -3px; }
+.projectContent[data-state='inactive'] { display: none; }
+.projectContent article { display: grid; gap: 1.5rem; padding-bottom: 2rem; }
+
+.projectHero {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.65fr) 1fr;
+  gap: clamp(1rem, 2vw, 2rem);
+  align-items: stretch;
+  min-height: 11rem;
+  padding-top: 1rem;
+}
+
+.projectMark {
+  display: grid;
+  place-items: center;
+  min-height: 11rem;
+  color: white;
+}
+
+.projectMark svg { width: clamp(3.5rem, 6vw, 6rem); height: clamp(3.5rem, 6vw, 6rem); }
+
+.projectHeroCopy { display: flex; flex-direction: column; justify-content: flex-end; gap: 0.45rem; padding-bottom: 0.5rem; }
+.projectHeroCopy p { color: var(--ink-muted); font-size: var(--fs-200); }
+.projectHeroCopy h3 { color: var(--ink); font-size: clamp(1.8rem, 1.1rem + 2.4vw, 3.5rem); line-height: 0.98; letter-spacing: -0.055em; }
+.projectHeroCopy > span { align-self: flex-start; margin-top: 0.45rem; padding: 0.28rem 0.5rem; border: 1px solid rgba(23, 50, 78, 0.2); color: var(--ink-muted); font-size: var(--fs-100); }
+
+.projectSummary { max-width: 44ch; color: var(--ink); font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.35rem); line-height: 1.45; }
+
+.projectQuestion {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1.25rem 0;
+  border-top: 1px solid rgba(23, 50, 78, 0.2);
+  border-bottom: 1px solid rgba(23, 50, 78, 0.2);
+}
+
+.projectQuestion span, .projectSections h4 { color: var(--ink-faint); font-family: var(--ff-display); font-size: var(--fs-200); font-weight: 600; }
+.projectQuestion h4 { max-width: 34ch; color: var(--ink); font-size: clamp(1.15rem, 1rem + 0.6vw, 1.55rem); line-height: 1.3; letter-spacing: -0.025em; }
+
+.projectSections { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 1.5rem; }
+.projectSections section { display: grid; align-content: start; gap: 0.45rem; }
+.projectSections p { color: var(--ink-muted); font-size: var(--fs-300); line-height: 1.6; }
+
+.tags { display: flex; flex-wrap: wrap; gap: 0.45rem; padding: 0; list-style: none; }
+.tag { padding: 0.35rem 0.55rem; border: 1px solid rgba(23, 50, 78, 0.18); color: var(--ink-muted); font-size: var(--fs-100); }
+
+.attachments { display: grid; gap: 0; border-top: 1px solid rgba(23, 50, 78, 0.18); }
+.attachment { display: flex; gap: 0.65rem; align-items: center; padding: 0.9rem 0; border-bottom: 1px solid rgba(23, 50, 78, 0.18); color: var(--ink); font-size: var(--fs-300); text-decoration: none; }
+.attachment[data-disabled='true'] { color: var(--ink-faint); }
+
+/* Contact */
+.links { display: flex; flex-direction: column; margin-top: 1.8rem; padding: 0; border-top: 1px solid rgba(23, 50, 78, 0.18); list-style: none; }
+.link { display: grid; grid-template-columns: 7rem 1fr; gap: 1rem; align-items: baseline; padding: 0.95rem 0; border-bottom: 1px solid rgba(23, 50, 78, 0.18); color: var(--ink); text-decoration: none; }
+a.link:hover { color: var(--panel-accent, var(--c-brand)); }
+.link[data-disabled='true'] { color: var(--ink-faint); }
+.linkLabel { font-family: var(--ff-display); font-size: var(--fs-200); font-weight: 600; }
+.linkValue { font-size: var(--fs-300); overflow-wrap: anywhere; }
+
+.form { display: grid; gap: 0.9rem; margin-top: 1.8rem; }
+.field { display: grid; gap: 0.35rem; }
+.fieldLabel { color: var(--ink-muted); font-family: var(--ff-display); font-size: var(--fs-200); font-weight: 600; }
+.input, .textarea { width: 100%; padding: 0.8rem; border: 1px solid rgba(23, 50, 78, 0.24); border-radius: 0; background: #fffaf0; color: var(--ink); font-size: var(--fs-300); }
+.input:hover, .textarea:hover { border-color: rgba(23, 50, 78, 0.5); }
+.input[aria-invalid='true'], .textarea[aria-invalid='true'] { border-color: #b84b3e; }
+.textarea { min-height: 5.5rem; resize: vertical; }
+.error { color: #a33d32; font-size: var(--fs-200); }
+.submit { justify-self: start; padding: 0.7rem 1rem; border: 1px solid var(--ink); border-radius: 0; background: var(--ink); color: white; font-family: var(--ff-display); font-size: var(--fs-300); font-weight: 600; }
+.submit:hover { background: var(--panel-accent, var(--c-brand)); }
+.submit:disabled { opacity: 0.5; cursor: default; }
+.sent { margin-top: 1.5rem; padding: 1rem; border-left: 3px solid var(--panel-accent, var(--c-brand)); background: #fffaf0; color: var(--ink); font-size: var(--fs-300); }
+.sent a { color: inherit; }
+
+@media (max-width: 68rem) {
+  .panel, .panel[data-wide='true'] { width: 100%; height: min(42rem, 100%); }
+  .projectBrowser { grid-template-columns: minmax(12.5rem, 0.75fr) minmax(0, 1.4fr); }
+  .projectHero { grid-template-columns: 1fr; }
+  .projectMark { min-height: 8rem; }
+}
+
+@media (max-aspect-ratio: 1/1), (max-width: 48rem) {
+  /* On a phone the set takes the whole viewport: a bezel drawn around a
+     portrait screen wastes the only space there is, so the casing thins down
+     to a hairline and the picture gets everything. */
+  .shell { padding: 0; }
+  .panel, .panel[data-wide='true'] {
+    width: 100%;
+    height: 100%;
+    border-width: 0.3rem;
+    border-radius: 0;
+    padding: calc(5.2rem + var(--safe-t)) 1rem calc(5.4rem + var(--safe-b));
+    box-shadow: none;
+  }
+  .heading { font-size: clamp(1.55rem, 6.7vw, 2.15rem); }
+  .projectBrowser { grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); }
+  .projectIndex { padding: 0.75rem 0 0.55rem; border-right: 0; border-bottom: 1px solid rgba(23, 50, 78, 0.2); }
+  .projectCount { display: none; }
+  .projectList { flex-direction: row; overflow-x: auto; overflow-y: hidden; }
+  .projectTrigger { min-width: 10.5rem; grid-template-columns: 1.8rem minmax(0, 1fr); padding: 0.55rem; border-top: 0; border-right: 1px solid rgba(23, 50, 78, 0.13); }
+  .projectTrigger[data-state='active'] { transform: translateY(-0.2rem); }
+  .projectMarkSmall { display: none; }
+  .projectDetails { padding: 0; }
+  .projectHero { grid-template-columns: minmax(6.5rem, 0.55fr) 1fr; min-height: 7.5rem; }
+  .projectMark { min-height: 7.5rem; }
+  .projectHeroCopy h3 { font-size: clamp(1.5rem, 7vw, 2.4rem); }
+  .projectSections { grid-template-columns: 1fr; }
+  .storyThread { grid-template-columns: 1fr; gap: 0.35rem; }
+  .link { grid-template-columns: 1fr; gap: 0.2rem; }
+}
+
+/* ============================================================================
+   IDENTITY: skills, gallery, contact
+   ========================================================================= */
+
+.identityGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(1.4rem, 3vw, 3rem);
+  align-items: start;
+}
+
+.skills { display: grid; gap: 1.1rem; }
+
+.skillGroup h3 {
+  font-family: var(--ff-display);
+  font-size: var(--fs-200);
+  font-weight: 700;
+  color: var(--panel-accent, var(--c-brand));
+  margin-bottom: 0.4rem;
+}
+
+.skillGroup ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.skillGroup li {
+  padding: 0.25rem 0.55rem;
+  border: 1px solid rgba(23, 50, 78, 0.18);
+  border-radius: 999px;
+  font-size: var(--fs-200);
+  color: var(--ink-muted);
+}
+
+.gallery {
+  margin-top: 1.6rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.75rem;
+}
+
+.galleryItem { margin: 0; display: grid; gap: 0.4rem; }
+.galleryItem img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 4px; }
+
+/* An empty frame, not a broken image: the layout has to be judgeable before
+   the photographs exist. */
+.gallerySlot {
+  aspect-ratio: 4 / 3;
+  border: 1px dashed rgba(23, 50, 78, 0.28);
+  border-radius: 4px;
+  background: rgba(23, 50, 78, 0.04);
+}
+
+.galleryItem figcaption { font-size: var(--fs-100); color: var(--ink-faint); }
+
+.contactBlock {
+  margin-top: 1.8rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid rgba(23, 50, 78, 0.16);
+}
+
+.contactLede {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+  font-size: var(--fs-300);
+  color: var(--ink-muted);
+}
+
+.link[data-disabled='true'] { opacity: 0.55; cursor: default; }
+
+/* ============================================================================
+   WORK: the recognition list
+   ========================================================================= */
+
+.awards {
+  /* Takes whatever is left and scrolls, so a growing award list can never
+     push the project triggers off the panel. */
+  flex: 1 1 auto;
+  /* A floor, not just min-height: 0. The panel got shorter when the cabinet
+     was added and this collapsed to nothing, taking the whole recognition list
+     with it. It scrolls past the floor rather than shrinking below it. */
+  min-height: 7rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid rgba(23, 50, 78, 0.16);
+}
+
+.awards h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--ff-display);
+  font-size: var(--fs-200);
+  font-weight: 700;
+  color: var(--panel-accent, var(--c-brand));
+  margin-bottom: 0.6rem;
+}
+
+.awards ul { list-style: none; padding: 0; display: grid; gap: 0.65rem; }
+
+.awards li { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 0.5rem; }
+
+.awardYear {
+  font-family: var(--ff-display);
+  font-size: var(--fs-100);
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+  padding-top: 0.12rem;
+}
+
+.awardCopy { display: grid; gap: 0.1rem; }
+.awardCopy strong { font-size: var(--fs-200); font-weight: 600; line-height: 1.3; }
+.awardCopy small { font-size: var(--fs-100); color: var(--ink-faint); line-height: 1.35; }
+
+/* ============================================================================
+   JOURNAL
+   ========================================================================= */
+
+.journalTrigger {
+  display: grid;
+  gap: 0.15rem;
+  width: 100%;
+  padding: 0.7rem 0.6rem;
+  border: 0;
+  border-top: 1px solid rgba(23, 50, 78, 0.13);
+  background: none;
+  text-align: left;
+  color: inherit;
+  cursor: pointer;
+}
+.journalTrigger:hover { background: rgba(23, 50, 78, 0.05); }
+.journalTrigger[data-state='active'] { background: rgba(23, 50, 78, 0.08); }
+.journalTrigger strong { font-size: var(--fs-300); font-weight: 600; line-height: 1.3; }
+
+.journalKind {
+  font-family: var(--ff-display);
+  font-size: var(--fs-100);
+  font-weight: 700;
+  color: var(--panel-accent, var(--c-brand));
+}
+.journalDate { font-size: var(--fs-100); color: var(--ink-faint); }
+
+/* Entries are meant to be read, so the measure is tighter and the leading
+   looser than anywhere else in the panel system. */
+.reader { max-width: 40rem; display: grid; gap: 0.9rem; }
+.reader h3 {
+  font-family: var(--ff-display);
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+.reader p { font-size: var(--fs-400); line-height: 1.72; color: var(--ink-muted); }
+.readerMeta {
+  font-family: var(--ff-display);
+  font-size: var(--fs-100);
+  font-weight: 700;
+  color: var(--panel-accent, var(--c-brand));
+}
+.readerStandfirst { font-size: var(--fs-500) !important; color: var(--ink) !important; line-height: 1.5 !important; }
+
+@media (max-aspect-ratio: 1/1), (max-width: 48rem) {
+  .identityGrid { grid-template-columns: 1fr; }
+  .awards { display: none; }
+}

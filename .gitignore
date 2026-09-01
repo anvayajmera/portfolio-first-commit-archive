@@ -1,0 +1,11 @@
+node_modules
+dist
+old
+*.local
+.DS_Store
+.vite
+*.tsbuildinfo
+.vercel
+.netlify
+.cache
+shots

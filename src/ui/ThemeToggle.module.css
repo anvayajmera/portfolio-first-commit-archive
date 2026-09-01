@@ -1,0 +1,39 @@
+/* Matches the projects shortcut and sound control so the top-right row reads
+   as one set of controls rather than three separate widgets. */
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.6rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid rgba(23, 50, 78, 0.35);
+  border-radius: 0;
+  background: rgba(244, 239, 228, 0.92);
+  color: #17324e;
+  font-family: var(--ff-display);
+  font-size: var(--fs-200);
+  font-weight: 600;
+  transition:
+    background-color var(--dur-fast) var(--ease-out-quart),
+    color var(--dur-fast) var(--ease-out-quart),
+    border-color var(--dur-fast) var(--ease-out-quart),
+    transform var(--dur-fast) var(--ease-out-quart);
+}
+
+.toggle:hover { background: #fffaf0; transform: translateY(-1px); }
+
+/* Once night is on, the control itself goes dark. A pale chip is the brightest
+   thing on the screen at night, and it would pull the eye straight off the
+   islands it is sitting over. */
+.toggle[aria-pressed='true'] {
+  background: rgba(11, 22, 44, 0.94);
+  border-color: rgba(150, 178, 232, 0.55);
+  color: #e8eeff;
+}
+.toggle[aria-pressed='true']:hover { background: #16305c; }
+
+@media (max-width: 40rem) {
+  .label { display: none; }
+  .toggle { padding: 0.55rem 0.6rem; }
+}

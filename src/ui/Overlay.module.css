@@ -1,0 +1,247 @@
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-panel);
+  pointer-events: none;
+}
+
+.titleWrap {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--gutter);
+  pointer-events: none;
+}
+
+.title {
+  margin: 0;
+  color: #f4efe4;
+  font-family: var(--ff-display);
+  font-size: var(--fs-title);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tr-title);
+  white-space: nowrap;
+  opacity: 0;
+  transform-origin: 50% 50%;
+  will-change: transform, opacity;
+}
+
+.flash {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-flash);
+  background: rgba(255, 255, 255, 0.72);
+  opacity: 0;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.chrome {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur-slow) var(--ease-out-quart);
+}
+.chrome[data-visible='true'] { opacity: 1; }
+
+.identity {
+  position: absolute;
+  top: calc(7.4rem + var(--safe-t));
+  left: var(--gutter);
+  max-width: 22rem;
+  pointer-events: none;
+}
+
+.identity strong {
+  font-family: var(--ff-display);
+  font-size: clamp(1.1rem, 1rem + 0.65vw, 1.55rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.identity span { color: rgba(23, 50, 78, 0.72); font-size: var(--fs-200); line-height: 1.35; }
+
+/* The tagline sits directly under the 3D wordmark, and both are behind the
+   panel once one is open. Fade them together so nothing shows through the
+   picture's edges. */
+.chrome[data-panel='true'] .identity { opacity: 0; }
+.identity { transition: opacity var(--dur-base) var(--ease-out-quart); }
+
+.actions {
+  position: absolute;
+  top: calc(1rem + var(--safe-t));
+  right: var(--gutter);
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.projectsShortcut {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.6rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid rgba(23, 50, 78, 0.35);
+  border-radius: 0;
+  background: rgba(244, 239, 228, 0.92);
+  color: #17324e;
+  font-family: var(--ff-display);
+  font-size: var(--fs-200);
+  font-weight: 600;
+  transition: background-color var(--dur-fast) var(--ease-out-quart), transform var(--dur-fast) var(--ease-out-quart);
+}
+.projectsShortcut:hover { background: #fffaf0; transform: translateY(-1px); }
+.projectsShortcut:disabled { opacity: 0.45; cursor: default; transform: none; }
+
+.mapPrompt {
+  position: absolute;
+  left: var(--gutter);
+  bottom: calc(6.15rem + var(--safe-b));
+  color: #17324e;
+  font-family: var(--ff-display);
+  font-size: var(--fs-300);
+  opacity: 0;
+  transform: translateY(0.35rem);
+  transition: opacity var(--dur-fast) var(--ease-out-quart), transform var(--dur-fast) var(--ease-out-quart);
+}
+.mapPrompt[data-visible='true'] { opacity: 0.76; transform: translateY(0); }
+
+.back {
+  /* Bottom right, on its own. It used to sit top-left where it covered the
+     wordmark and collided with the cabinet; that corner belongs to the name and
+     the top-right belongs to the controls, so this gets the one corner nothing
+     else wants.
+
+     Warm red, and the only red on the site. Everything else is blue, sand or
+     teal, so a single warm accent reads instantly as the way out without
+     needing to be large. */
+  position: absolute;
+  right: var(--gutter);
+  bottom: calc(1.35rem + var(--safe-b));
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.9rem;
+  padding: 0.7rem 1.15rem;
+  border: 1px solid #a33a2c;
+  border-radius: 0;
+  background: #c04a37;
+  color: #fff6ef;
+  font-family: var(--ff-display);
+  font-size: var(--fs-300);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  box-shadow: 0 10px 26px -12px rgba(120, 30, 18, 0.85);
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition:
+    opacity var(--dur-base) var(--ease-out-quart),
+    transform var(--dur-base) var(--ease-out-quart),
+    background-color var(--dur-fast) var(--ease-out-quart);
+}
+.back[data-visible='true'] { opacity: 1; transform: translateX(0); }
+.back[data-visible='false'] { pointer-events: none; }
+.back:hover { background: #fffaf0; }
+
+.hint {
+  position: absolute;
+  left: var(--gutter);
+  bottom: calc(7.85rem + var(--safe-b));
+  max-width: 28rem;
+  color: rgba(23, 50, 78, 0.7);
+  font-size: var(--fs-200);
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out-quart);
+}
+.hint[data-visible='true'] { opacity: 1; }
+
+.nav {
+  position: absolute;
+  left: var(--gutter);
+  bottom: calc(1.2rem + var(--safe-b));
+  display: flex;
+  align-items: stretch;
+  max-width: calc(100vw - var(--gutter) * 2);
+  border: 1px solid rgba(23, 50, 78, 0.34);
+  border-radius: 0;
+  background: rgba(244, 239, 228, 0.94);
+  box-shadow: 0 14px 34px rgba(23, 50, 78, 0.12);
+  overflow-x: auto;
+  pointer-events: auto;
+  transition: max-width var(--dur-slow) var(--ease-out-quart);
+}
+
+.navItem {
+  display: inline-grid;
+  grid-template-columns: auto auto;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 8.5rem;
+  padding: 0.65rem 0.8rem;
+  border-right: 1px solid rgba(23, 50, 78, 0.18);
+  color: rgba(23, 50, 78, 0.72);
+  text-align: left;
+  transition: color var(--dur-fast) var(--ease-out-quart), background-color var(--dur-fast) var(--ease-out-quart);
+}
+.navItem:last-child { border-right: 0; }
+.navItem:hover { color: #17324e; background: #fffaf0; }
+.navItem[aria-current='true'] { color: #17324e; background: #fffaf0; }
+.navItem:disabled { cursor: default; }
+
+.navNumber { font-family: var(--ff-display); font-size: var(--fs-100); color: rgba(23, 50, 78, 0.5); font-variant-numeric: tabular-nums; }
+.navCopy { display: grid; gap: 0.05rem; white-space: nowrap; }
+.navCopy strong { font-family: var(--ff-display); font-size: var(--fs-200); line-height: 1.1; }
+.navCopy small { color: rgba(23, 50, 78, 0.58); font-size: 0.6rem; line-height: 1.2; }
+
+@media (min-aspect-ratio: 1/1) and (min-width: 48.0625rem) {
+  .chrome[data-panel='true'] .nav { max-width: 43vw; }
+}
+
+@media (max-width: 48rem), (max-aspect-ratio: 1/1) {
+  .identity { max-width: 52vw; }
+  .identity span { display: none; }
+  .chrome[data-panel='true'] .identity { opacity: 0; }
+  .actions { top: calc(0.7rem + var(--safe-t)); right: 0.75rem; }
+  .projectsShortcut span { display: none; }
+  .projectsShortcut { padding-inline: 0.65rem; }
+  .back { top: calc(0.7rem + var(--safe-t)); left: 0.75rem; }
+  .mapPrompt, .hint { display: none; }
+  .nav { left: 0.65rem; right: 0.65rem; bottom: calc(0.65rem + var(--safe-b)); max-width: none; }
+  .navItem { min-width: max-content; flex: 1 0 auto; padding: 0.55rem 0.65rem; }
+  .navCopy small { display: none; }
+}
+
+@media (max-width: 30rem) {
+  .navItem { min-width: 4.3rem; grid-template-columns: 1fr; justify-items: center; gap: 0.15rem; text-align: center; }
+  .navItem svg { display: none; }
+  .navCopy strong { font-size: 0.67rem; }
+  .navNumber { font-size: 0.55rem; }
+}
+
+
+/* Night variants for the chrome that sits directly on the sky. See the block
+   at the end of styles/base.css for the reasoning. */
+
+:global(html[data-theme='night']) .identity strong { color: #eef3ff; }
+:global(html[data-theme='night']) .identity span { color: rgba(214, 227, 255, 0.7); }
+:global(html[data-theme='night']) .mapPrompt { color: #dae4ff; }
+
+:global(html[data-theme='night']) .projectsShortcut {
+  background: rgba(11, 22, 44, 0.94);
+  border-color: rgba(150, 178, 232, 0.55);
+  color: #e8eeff;
+}
+:global(html[data-theme='night']) .projectsShortcut:hover { background: #16305c; }
+
+:global(html[data-theme='night']) .back {
+  background: rgba(12, 26, 51, 0.92);
+  border-color: rgba(190, 212, 255, 0.4);
+  color: #e4ecff;
+}

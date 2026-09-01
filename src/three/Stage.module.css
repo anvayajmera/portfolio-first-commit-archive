@@ -1,0 +1,28 @@
+/* The canvas host. Fixed, full-bleed, and BELOW the HTML overlay.
+
+   Unlike the overlay, this layer DOES take pointer events — the islands are
+   clickable 3D objects and raycasting needs them. Nothing scrolls at the
+   document level (body is overflow:hidden), so there is no scroll-blocking
+   concern in taking them.
+
+   `inset: 0` on a fixed element resolves against the layout viewport, which on
+   iOS Safari does not resize when the URL bar hides — so the scene stays
+   steady while the browser chrome animates, rather than jittering the way a
+   100vh element does. */
+
+.host {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-canvas);
+  background-color: var(--c-void);
+}
+
+.host canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  /* Let the browser handle nothing: no document scroll to preserve, and
+     leaving default touch behaviour on swallows drag-to-parallax. */
+  touch-action: none;
+}

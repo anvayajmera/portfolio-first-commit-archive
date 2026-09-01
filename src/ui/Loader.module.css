@@ -1,0 +1,70 @@
+/* Branded loading state (spec §9) — the palette and the geometry of the site
+   it is loading, not a spinner. */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-loader);
+  display: grid;
+  place-items: center;
+  background: var(--c-void);
+  transition: opacity var(--dur-slow) var(--ease-out-quart);
+}
+.root[data-done='true'] { opacity: 0; pointer-events: none; }
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-6);
+}
+
+/* The mark: the same faceted 'A' as the favicon, drawing itself in. */
+.mark { width: 56px; height: 56px; overflow: visible; }
+
+.markStroke {
+  fill: none;
+  stroke: var(--c-brand);
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+  stroke-dasharray: 96;
+  stroke-dashoffset: 96;
+  animation: draw 2.4s var(--ease-in-out) infinite;
+}
+
+@keyframes draw {
+  0%   { stroke-dashoffset: 96; opacity: 0.25; }
+  45%  { stroke-dashoffset: 0;  opacity: 1; }
+  75%  { stroke-dashoffset: 0;  opacity: 1; }
+  100% { stroke-dashoffset: -96; opacity: 0.25; }
+}
+
+.track {
+  width: min(11rem, 44vw);
+  height: 2px;
+  border-radius: var(--r-pill);
+  background: rgba(59, 130, 246, 0.18);
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  width: 0%;
+  border-radius: var(--r-pill);
+  background: var(--c-brand);
+  transition: width var(--dur-base) var(--ease-out-quart);
+}
+
+.label {
+  font-family: var(--ff-display);
+  font-size: var(--fs-100);
+  font-weight: 700;
+  letter-spacing: var(--tr-wide);
+  text-transform: none;
+  color: var(--c-text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .markStroke { animation: none; stroke-dashoffset: 0; }
+}
